@@ -29,9 +29,10 @@ function HandleRequests(request, response) {
 }
 
 var server = http.createServer(HandleRequests).listen(port);
+
 if(server) {
     isStarted = true;
     server.timeout = 1000;
-    
+
     console.log("Server connected at port " + port);
 }
