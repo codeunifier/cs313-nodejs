@@ -1,6 +1,8 @@
-// const express = require('express');
-// const app = express();
+const express = require('express');
+const app = express();
 
-// app.get('/', (req, res) => res.send('Hello world!'));
+app.get('/', (req, res) => res.send('Hello world!'));
 
-// app.listen(4000, () => console.log('App is listening on port 4000'));
+var port = process.env.port | 4000;
+
+app.listen(port, () => console.log('App is listening on port ' + port));
