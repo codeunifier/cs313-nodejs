@@ -6,7 +6,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
         <script type='text/javascript'>
-            var socket = io.connect('https://blooming-mesa-10805.herokuapp.com/main');
+            var socket = io.connect();
            
             socket.on('chat', function (msg) {
                 $("#chatList").append($('<li>').text(msg));
