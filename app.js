@@ -1,6 +1,6 @@
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 
-app.get('/', (req, res) => res.send('Hello world!'));
+// app.get('/', (req, res) => res.send('Hello world!'));
 
-app.listen(4000, () => console.log('App is listening on port 4000'));
+// app.listen(4000, () => console.log('App is listening on port 4000'));
