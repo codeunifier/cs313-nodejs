@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var assignmentsRouter = require('./routes/week08');
+var assignmentsRouter = require('./routes/assignments');
 
 var app = express();
 var server = require('http').Server(app);

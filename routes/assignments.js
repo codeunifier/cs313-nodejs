@@ -9,9 +9,8 @@ router.get('/', function(req, res, next) {
 router.get('/week08', function (req, res, next) {
     res.redirect('/assignments/week08/personal')
 });
-
 router.get('/week08/personal', function (req, res, next) {
-    res.send("Personal assignment");
+    res.render('personal-08', { title: "Week 08 Personal"});
 });
 
 router.get('/team', function (req, res, next) {
