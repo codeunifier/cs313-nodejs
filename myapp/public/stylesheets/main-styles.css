@@ -1,0 +1,21 @@
+#mainMessageContainer {
+    width: 99%;
+    height: 30px;
+    position: absolute;
+    bottom: 20px;
+}
+
+#chatForm > div {
+    display: inline-block;
+    height: 100%;
+}
+
+#messageInputContainer {
+    width: 80%;
+}
+
+#messageInput {
+    height: 100%;
+    width: 80%;
+    font-size: 20px;
+}

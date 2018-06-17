@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1 class='main-header'><a href='main'><%= title %></a></h1>
+    <div>
+      <table id="tblAssignments">
+        <tr>
+          <th></th>
+          <th>Team Activity</th>
+          <th>Personal Assignment</th>
+        </tr>
+        <tr>
+          <td>Week 08</td>
+          <td>Completed through learnyounode</td>
+          <td><a href='assignments/week08/personal'>Setting up Express</a></td>
+        </tr>
+        <tr>
+          <td>Week 09</td>
+          <td>Coming soon...</td>
+          <td>Coming soon...</td>
+        </tr>
+      </table>
+    </div>
+    <%- include('partials/footer') %>
+  </body>
+</html>

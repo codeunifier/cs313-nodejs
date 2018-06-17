@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Planechat</title>
+        <link rel='stylesheet' href='/stylesheets/main-styles.css' />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
+        <script type='text/javascript'>
+            var socket = io.connect('http://localhost:3000');
+
+            socket.on('chat', function (msg) {
+                $("#chatList").append($('<li>').text(msg));
+            });
+            
+            window.onload = function () {
+                var form = document.getElementById('chatForm');
+
+                form.onsubmit = function (event) {
+                    socket.emit('chat', $('#messageInput').val());
+                    $('#messageInput').val('');
+                    return false;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="mainChatContainer">
+            <ul id="chatList"></ul>
+        </div>
+        <div id="mainMessageContainer">
+            <form id="chatForm" action="">
+                <div id="messageInputContainer">
+                    <input type="text" id="messageInput" autocomplete="off">
+                </div>
+                <div id="messageSendContainer">
+                    <button id="btnSendMessage">Send</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

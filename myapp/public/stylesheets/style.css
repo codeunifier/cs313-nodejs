@@ -1,0 +1,48 @@
+body {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.main-header a {
+  text-decoration: none;
+  color: black;
+}
+
+#tblAssignments {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+}
+
+tblAssignments a {
+  color: black;
+}
+
+tblAssignments a:hover {
+  color: white;
+}
+
+#tblAssignments tr:first-child {
+  background-color: #fc4445 !important;
+}
+
+#tblAssignments tr:nth-child(even) {
+  background-color: #55bcc9;
+}
+
+#tblAssignments tr:nth-child(odd) {
+  background-color: #97caef;
+}
+
+#tblAssignments th {
+  border: 1px black solid;
+  padding: 15px;
+  font-size: 18px;
+}
+
+#tblAssignments td {
+  text-align: center;
+  padding: 10px;
+  border: 1px black solid;
+}
