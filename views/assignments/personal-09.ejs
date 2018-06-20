@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title><%= title %></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/stylesheets/assignments/style.css" type="text/css">
+        <link rel="stylesheet" href="/stylesheets/assignments/personal-09-styles.css" type="text/css">
+        <script type="text/javascript">
+            window.onload = function () {
+                if ($("#hidden_error")[0].textContent != "") {
+                    $("#errorContainer").show();
+                }
+
+                $("#selMailType").on('change', function (event) {
+                    if (event.target.value.includes("Letters")) {
+                        if ($("#inWeight").val() > 3.5) {
+                            $("#inWeight").val(3.5);
+                        }
+
+                        $("#inWeight").prop('max', '3.5');
+                    } else {
+                        $("#inWeight").prop('max', '13');
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div class="hidden-data" id="hidden_error"><%= error %></div>
+        <%- include('../partials/assignment-header') %>
+        <div class="body-data">
+            <div class="explanation">This week's assignment was to make a Postal Rate Calculator.</div>
+            <form id="postalRateForm" action="/assignments/getRate">
+                <select id="selMailType" name="type">
+                    <option>Letters (Stamped)</option>
+                    <option>Letters (Metered)</option>
+                    <option>Large Envelopes (Flat)</option>
+                    <option>First-Class Package Service - Retail</option>
+                </select>
+                <div id="weightContainer">
+                    <span>Weight: </span>
+                    <input id="inWeight" type="number" name="weight" min="1", max="3.5" required/>
+                    <span>oz. (decimal numbers will be rounded to largest whole number)</span>
+                </div>
+                <div id="submitContainer">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+            <div id="errorContainer">
+                <%= error %>
+            </div>
+        </div>
+    </body>
+</html>

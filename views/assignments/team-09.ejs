@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/stylesheets/assignments/style.css" type="text/css">
+        <link rel="stylesheet" href="/stylesheets/assignments/team-09-styles.css" type="text/css">
+        <script type="text/javascript">
+            function onDisplayResultClick() {
+                var o1 = $("#operand1").val();
+                var o2 = $("#operand2").val();
+                var operator = $("#operator").val();
+
+                $.ajax({
+                    url: "/assignments/compute",
+                    method: "GET",
+                    data: {
+                        operand1: o1,
+                        operand2: o2,
+                        operator: operator
+                    },
+                    success: function (data) {
+                        if (data != null) {
+                            $("#resultContainer").show();
+                            $("#resultContainer").text(data.result);
+                        }
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <%- include('../partials/assignment-header') %>
+        <div class="body-data">
+            <div id="formContainer">
+                <form action="/assignments/compute" method="POST">
+                    <input type="number" name="operand1" id="operand1" placeholder="First Operand">
+                    <select name="operator" id="operator">
+                        <option>+</option>
+                        <option>-</option>
+                        <option>/</option>
+                        <option>*</option>
+                    </select>
+                    <input type="number" name="operand2" id="operand2" placeholder="Second Operand">
+                    <input type="button" onclick="onDisplayResultClick()" value="Display Result">
+                    <div id="resultContainer"></div>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

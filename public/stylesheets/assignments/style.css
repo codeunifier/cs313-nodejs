@@ -29,6 +29,7 @@ pre {
 .back-container {
     float: left;
     width: 60px;
+    line-height: 0;
     height: 100%;
 }
 

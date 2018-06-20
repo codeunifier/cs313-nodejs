@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Planechat</title>
+        <link rel='stylesheet' href='/stylesheets/planechat/styles.css' />
+        <script src="/javascripts/scripts.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
+        <script src="/javascripts/planechat/planechat-scripts.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                socket.emit('userLoaded', $('#hidden_username')[0].textContent);
+
+                var form = document.getElementById('chatForm');
+                
+                form.onsubmit = function (event) {
+                    var model = {
+                        from_user: $('#hidden_username')[0].textContent,
+                        message: $('#messageInput').val()
+                    }
+
+                    socket.emit('chat', model);
+
+                    $('#messageInput').val('');
+                    
+                    return false;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="hidden-data" id="hidden_username"><%= username %></div>
+        <div id="gridWrapper">
+            <div id="leftContainer">
+                <div id="titleBar">
+                    <span><%= title %></span>
+                </div>
+                <div id="usernameContainer">
+                    <span>Your user id: <%= username %></span>
+                </div>
+                <div id="onlineUsersContainer">
+                    <span>Users online:</span><br>
+                    <ul id="onlineUsersList"></ul>
+                </div>
+            </div>
+            <div id="mainChatContainer">
+                <ul id="chatList"></ul>
+            </div>
+            <div id="mainMessageContainer">
+                <form id="chatForm" action="">
+                    <div id="messageInputContainer">
+                        <input type="text" id="messageInput" autocomplete="off" placeholder="Press enter to send">
+                    </div>
+                </form>
+            </div>
+            <div id="rightContainer">
+                To-do List
+                <ul>
+                    <li>Set up mongo database</li>
+                    <li>Set up an active_users collection</li>
+                    <li>Write to active_users when user connects, remove it on disconnect</li>
+                    <li>Every connect / disconnect should emit an update for all users to update their active users list,
+                        which is read from the active_users collection
+                    </li>
+                    <li>Take a deep breath</li>
+                    <li>Find a better color scheme</li>
+                    <li>Set up login / user credential validation / hashing / cookies / blech</li>
+                    <li>Load login modal with ajax on window load</li>
+                    <li>Add logout button to load modal with ajax</li>
+                    <li>Set up socket io to grab usernames from mongo on load</li>
+                    <li>Eat a cookie</li>
+                    <li>When loading the conversation, maybe only load to a certain extent then load more if 
+                        the user scrolls up</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

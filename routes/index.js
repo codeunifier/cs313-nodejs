@@ -8,7 +8,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/main', function(req, res, next) {
   //var io = req.app.get('socket'io);
-  res.render('main', { title: 'Planechat' });
+  var user = "tester_" + Math.floor(Math.random() * (1000000 - 1) + 1000000);
+  res.render('main/main', { title: 'Planechat', username: user });
 });
 
 

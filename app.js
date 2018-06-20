@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,7 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //set socket io
-app.set('socketio', io);
+app.set('socketio', io)
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,6 +26,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//database setup
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/myDB');
+
+var messageSchema = mongoose.Schema({
+  _id: Number,
+  message: String,
+  from_user: String
+});
+
+var messageModel = mongoose.model("messages", messageSchema);
+
+//Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/assignments', assignmentsRouter);
@@ -45,17 +59,26 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// app.get('/socket.io/socket.io.js', function (req, res, next) {
-
-// });
-
 io.sockets.on('connection', function (socket) {
-  console.log("user connected");
+  console.log('user connected');
+  
+  socket.on('chat', function (model) {
+    var newMsg = new messageModel(model);
+    // console.log("New model for database:");
+    // console.log(newMsg);
+    // newMsg.save().then(item => {
+    //   console.log("Successfully saved to database");
+    //   // console.log(item);
+    // }).catch(err => {
+    //   console.log("Unable to save to database");
+    //   // console.log(err);
+    // });
 
-  socket.on('chat', function (msg) {
-    console.log("Message received:");
-    console.log(msg);
-    io.emit('chat', msg);
+    io.emit('chat', model);
+  });
+
+  socket.on('userLoaded', function (username) {
+    io.emit('newUser', username);
   });
 
   socket.on('disconnect', function () {

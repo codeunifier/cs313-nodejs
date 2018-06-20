@@ -1,0 +1,18 @@
+#postalRateForm {
+    width: 100%;
+}
+
+#postalRateForm > * {
+    margin: 10px;
+}
+
+#errorContainer {
+    width: 100%;
+    text-align: center;
+    color: red;
+    display: none;
+}
+
+.hidden-data {
+    display: none;
+}
