@@ -20,22 +20,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //security
-// app.use(helmet({
-//   frameguard: {
-//     action: "deny"
-//   }
-// }));
-// app.use(session({
-//   name: 'session',
-//   secret: "planechat",
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     secure: true,
-//     httpOnly: true,
-//     maxAge: 60000 * 60 * 24 * 30 * 3 //3 months
-//   }
-// }));
+app.use(helmet({
+  frameguard: {
+    action: "deny"
+  }
+}));
+app.use(session({
+  name: 'session',
+  secret: "planechat",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    maxAge: 60000 * 60 * 24 * 30 * 3 //3 months
+  }
+}));
 
 //set socket io
 app.set('socketio', io)
