@@ -1,0 +1,56 @@
+db.users.drop();
+db.messages.drop();
+
+db.createCollection("users", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["username", "password_hash", "date_created"],
+            properties: {
+                username: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                password_hash: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                date_created: {
+                    bsonType: "date",
+                    description: "must be a date and is required"
+                },
+                date_deleted: {
+                    bsonType: "date",
+                    description: "must be a date and is required"
+                }
+            }
+        }
+    }
+});
+
+db.createCollection("messages", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["message", "date_sent", "from_user"],
+            properties: {
+                message: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                from_user: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                date_sent: {
+                    bsonType: "date",
+                    description: "must be a date and is required"
+                },
+                date_deleted: {
+                    bsonType: "date",
+                    description: "must be a date and is required"
+                }
+            }
+        }
+    }
+});

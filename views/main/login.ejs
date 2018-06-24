@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel='stylesheet' href='/stylesheets/planechat/login-logout.css' />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="/javascripts/planechat/ajaxData.js"></script>
+        <script src="/javascripts/planechat/login-logout-scripts.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                var elm = document.getElementById("errorMessage");
+                if (elm.innerText != "") {
+                    if (elm.innerText.includes("TypeError")) {
+                        elm.innerText = "Cannot connect to database";
+                    }
+
+                    $("#errorMessage").show();
+                }
+
+                //set username/password key listeners for enter press
+                $("#l_user, #l_pass").keypress(function (e) {
+                    var key = e.which;
+                    //Enter key code
+                    if (key == 13) {
+                        onLoginClick();
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="loginContainer">
+                <input type="text" name="username" id="l_user" placeholder="Username" required>
+                <input type="password" name="password" id="l_pass" placeholder="Password" required>
+                <button onclick="onLoginClick()">Log In</button>
+                <div id="newAccountButtonContainer">
+                    <button onclick="toggleViews(1)">Create New Account</button>
+                </div>
+            </div>
+            <div id="accountContainer">
+                <form id="accountForm" action="newAccount" method="POST" onsubmit="return validateAccountForm()">
+                    <input type="text" name="username" id="a_user" placeholder="Create username" required>
+                    <input type="password" name="pass" id="a_pass" placeholder="Create password" required>
+                    <input type="password" name="passVerify" id="a_passVerify" placeholder="Verify password" required>
+                    <input type="submit" id="a_submit" value="Create Account">
+                </form>
+                <div id="cancelButtonContainer">
+                    <button onclick="toggleViews(0)">Cancel</button>
+                </div>
+            </div>
+            <div id="errorMessage"><%= message %></div>
+        </div>
+    </body>
+</html>

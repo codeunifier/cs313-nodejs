@@ -7,6 +7,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
         <script src="/javascripts/planechat/planechat-scripts.js"></script>
+        <script src="/javascripts/cookie.js"></script>
         <script type="text/javascript">
             window.onload = function () {
                 socket.emit('userLoaded', $('#hidden_username')[0].textContent);
@@ -56,7 +57,6 @@
             <div id="rightContainer">
                 To-do List
                 <ul>
-                    <li>Set up mongo database</li>
                     <li>Set up an active_users collection</li>
                     <li>Write to active_users when user connects, remove it on disconnect</li>
                     <li>Every connect / disconnect should emit an update for all users to update their active users list,
@@ -64,13 +64,12 @@
                     </li>
                     <li>Take a deep breath</li>
                     <li>Find a better color scheme</li>
-                    <li>Set up login / user credential validation / hashing / cookies / blech</li>
-                    <li>Load login modal with ajax on window load</li>
-                    <li>Add logout button to load modal with ajax</li>
+                    <li>Add logout / switch users button</li>
                     <li>Set up socket io to grab usernames from mongo on load</li>
                     <li>Eat a cookie</li>
                     <li>When loading the conversation, maybe only load to a certain extent then load more if 
                         the user scrolls up</li>
+                    <li>Find favicon</li>
                 </ul>
             </div>
         </div>
