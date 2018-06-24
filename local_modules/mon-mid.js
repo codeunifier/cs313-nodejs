@@ -6,8 +6,8 @@ var bcrypt = require('bcrypt');
 var User = require('../models/user-model');
 const SALT_ROUNDS = 13; //~ 1sec / hash
 
-// const MONGODB_URI = process.env.MONGOLAB_URI;
-const MONGODB_URI = 'mongodb://localhost:27977/planechat';
+const MONGODB_URI = process.env.MONGOLAB_URI;
+// const MONGODB_URI = 'mongodb://localhost:27977/planechat';
 
 module.exports.attemptConnection = function attemptConnection(callback) {
     mongoose.connect(MONGODB_URI, {
