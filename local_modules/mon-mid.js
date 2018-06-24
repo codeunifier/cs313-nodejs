@@ -56,7 +56,7 @@ module.exports.validateUser = function validateUser(username, pass, callback) {
             callback(null, false);
           } else {
             user = user.toObject();
-            
+            console.log("Validating user credentials...");
             bcrypt.compare(sanPass, user.password_hash).then(function (res) {
                 callback(null, res);
             });

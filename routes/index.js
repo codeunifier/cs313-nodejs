@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 function auth(req, res, next) {
   var cookie = req.cookies.pc_login;
 
-  if (ssn) {
+  if (ssn && cookie != null) {
     if (req.session && ssn.username == cookie) {
       next();
     } else {
@@ -48,16 +48,19 @@ router.get('/login', function (req, res, next) {
  * *************************************************/
 
 router.post('/login', function (req, res) {
+  console.log("Inside login");
   ssn = req.session;
 
   var username = req.body.username;
   var password = req.body.password;
 
   mongoose.validateUser(username, password, function(err, isValid) {
+    console.log("Validation came back");
     if (err) {
       res.status(400);
       res.send({error: err});
     } else if (isValid) {
+      console.log("Valid credentials");
       //TODO: check if user is already logged in
       //TODO: set up active_users collection
       

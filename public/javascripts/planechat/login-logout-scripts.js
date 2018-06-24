@@ -70,6 +70,8 @@ function onCreateAccountClick() {
         var pass = $("#a_pass").val();
 
         ajax.newAccount(user, pass).done(function (data) {
+            console.log("New account came back");
+            console.log(data);
             if (data.error == null) {
                 window.location = "/main";
             } else {
