@@ -25,6 +25,13 @@
                         onLoginClick();
                     }
                 });
+
+                $("#a_user, #a_pass, #a_passVerify").keypress(function (e) {
+                    var key = e.which;
+                    if (key == 13) {
+                        onCreateAccountClick();
+                    }
+                })
             }
         </script>
     </head>
@@ -39,12 +46,10 @@
                 </div>
             </div>
             <div id="accountContainer">
-                <form id="accountForm" action="newAccount" method="POST" onsubmit="return validateAccountForm()">
-                    <input type="text" name="username" id="a_user" placeholder="Create username" required>
-                    <input type="password" name="pass" id="a_pass" placeholder="Create password" required>
-                    <input type="password" name="passVerify" id="a_passVerify" placeholder="Verify password" required>
-                    <input type="submit" id="a_submit" value="Create Account">
-                </form>
+                <input type="text" name="username" id="a_user" placeholder="Create username" required>
+                <input type="password" name="pass" id="a_pass" placeholder="Create password" required>
+                <input type="password" name="passVerify" id="a_passVerify" placeholder="Verify password" required>
+                <button onclick="onCreateAccountClick()">Create New Account</button>
                 <div id="cancelButtonContainer">
                     <button onclick="toggleViews(0)">Cancel</button>
                 </div>

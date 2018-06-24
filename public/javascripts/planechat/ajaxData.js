@@ -10,7 +10,6 @@ var ajaxData = function () {
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
-                        console.log(data);
                         deferred.resolve(data);
                     }
                 },
@@ -20,6 +19,29 @@ var ajaxData = function () {
                     });
                 }
             });
+
+            return deferred.promise();
+        },
+        newAccount: function (username, password) {
+            var deferred = $.Deferred();
+
+            $.ajax({
+                method: "POST",
+                url: "/newAccount",
+                data: { username: username, pass: password },
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        console.log(data);
+                        deferred.resolve(data);
+                    }
+                },
+                error: function (err) {
+                    deferred.resolve({
+                        error: err.responseText
+                    });
+                }
+            })
 
             return deferred.promise();
         }

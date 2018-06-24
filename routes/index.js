@@ -76,6 +76,8 @@ router.post('/login', function (req, res) {
 });
 
 router.post('/newAccount', function (req, res) {
+  ssn = req.session;
+
   var model = {
     username: req.body.username,
     password: req.body.pass
@@ -89,9 +91,8 @@ router.post('/newAccount', function (req, res) {
       var expiration = new Date();
       expiration.setFullYear(expiration.getFullYear() + 1);
 
-      var cookie = new LoginCookie(model.username, expiration);
-
-      res.cookie("pc_login", JSON.stringify(cookie));
+      ssn.username = model.username;
+      res.cookie("pc_login", model.username);
       res.status(200);
       res.send(JSON.stringify({data: true}));
     }

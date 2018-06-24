@@ -29,6 +29,8 @@
 })(window.shannon = window.shannon || Object.create(null));
 
 
+var ajax = new ajaxData();
+
 function toggleViews(viewNum) {
     if (viewNum) {
         //new account
@@ -62,6 +64,22 @@ function validateAccountForm() {
     }
 }
 
+function onCreateAccountClick() {
+    if (validateAccountForm()) {
+        var user = $("#a_user").val();
+        var pass = $("#a_pass").val();
+
+        ajax.newAccount(user, pass).done(function (data) {
+            if (data.error == null) {
+                window.location = "/main";
+            } else {
+                document.getElementById("errorMessage").innerText = data.error;
+                $("#errorMessage").show();
+            }
+        });
+    }
+}
+
 function validateLoginForm() {
     var user = $("#l_user").val();
     var pass = $("#l_pass").val();
@@ -73,8 +91,6 @@ function onLoginClick() {
     if (validateLoginForm()) {
         var user = $("#l_user").val();
         var pass = $("#l_pass").val();
-
-        var ajax = new ajaxData();
 
         ajax.login(user, pass).done(function (data) {
             if (data.error == null) {
