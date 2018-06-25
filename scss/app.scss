@@ -1,0 +1,26 @@
+$footer-height : 2em;
+$button-height: 2em;
+$button-margin: 5%;
+
+html {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}
+
+footer {
+    height: $footer-height;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+button {
+    width: 100%;
+    height: $button-height;
+    margin-top: $button-margin;
+}

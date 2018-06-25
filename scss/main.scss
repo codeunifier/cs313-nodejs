@@ -1,26 +1,11 @@
-html {
-    height: 100%;
-    overflow-y: hidden;
-}
-
-body {
-    height: 100%;
-    margin: 0;
-}
+$grid-columns: 10em 1fr 15em;
+$grid-rows: 1fr 5em;
 
 #gridWrapper {
     height: 100%;
     display: grid;
-    grid-template-columns: 10em 1fr 15em;
-    grid-template-rows: 1fr 5em;
-}
-
-footer {
-    height: 2em;
-    width: 100%;
-    /* background-color: #fc4445; */
-    position: fixed;
-    bottom: 0;
+    grid-template-columns: $grid-columns;
+    grid-template-rows: $grid-rows;
 }
 
 .hidden-data {
@@ -43,12 +28,12 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-}
 
-#titleBar span {
-    font-size: 1.5em;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    margin: 10px;
+    span {
+        font-size: 1.5em;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        margin: 10px;
+    }
 }
 
 /*
@@ -62,13 +47,13 @@ footer {
 
 #chatList {
     list-style-type: none;
-}
 
-#chatList li {
-    height: 2em;
-    border: .1em solid black;
-    margin: 1em;
-    padding: .5em;
+    li {
+        height: 2em;
+        border: .1em solid black;
+        margin: 1em;
+        padding: .5em;
+    }
 }
 
 /*
@@ -83,11 +68,11 @@ footer {
 
 #chatForm {
     margin: 1em;
-}
 
-#chatForm > div {
-    display: inline-block;
-    height: 100%;
+    > div {
+        display: inline-block;
+        height: 100%;
+    }
 }
 
 #messageInputContainer {

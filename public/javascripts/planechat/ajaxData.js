@@ -32,7 +32,6 @@ var ajaxData = function () {
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
-                        console.log(data);
                         deferred.resolve(data);
                     }
                 },
