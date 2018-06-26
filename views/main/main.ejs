@@ -4,10 +4,12 @@
         <title>Planechat</title>
         <link rel='stylesheet' href='/stylesheets/planechat/app.css' />
         <link rel='stylesheet' href='/stylesheets/planechat/main.css' />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         <script src="/javascripts/scripts.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
         <script src="/javascripts/planechat/planechat-scripts.js"></script>
+        <script src="/javascripts/planechat/magicApi.js"></script>
         <script src="/javascripts/cookie.js"></script>
         <script type="text/javascript">
             window.onload = function () {
@@ -27,6 +29,28 @@
                     
                     return false;
                 }
+
+                var magic = new MagicApi();
+
+                //set key listener for search input
+                $("#searchInput").on("input", function (event) {
+                    //TODO: add live search for magic cards
+                    var text = event.target.value;
+
+                    if (text.length > 2) {
+                        magic.queryCardsByName(text).done(function (data) {
+                            if (data) {
+                                if (data.cards.length > 0) {
+                                    setSearchResults(data.cards);
+                                } else {
+                                    setSearchResults(null);
+                                }
+                            }
+                        });
+                    } else {
+                        setSearchResults(null);
+                    }
+                });
             }
         </script>
     </head>
@@ -46,7 +70,7 @@
                 </div>
             </div>
             <div id="mainChatContainer">
-                <ul id="chatList"></ul>
+                <div id="chatList"></div>
             </div>
             <div id="mainMessageContainer">
                 <form id="chatForm" action="">
@@ -56,24 +80,36 @@
                 </form>
             </div>
             <div id="rightContainer">
-                To-do List
-                <ul>
-                    <li>Set up an active_users collection</li>
-                    <li>Write to active_users when user connects, remove it on disconnect</li>
-                    <li>Every connect / disconnect should emit an update for all users to update their active users list,
-                        which is read from the active_users collection
-                    </li>
-                    <li>Take a deep breath</li>
-                    <li>Find a better color scheme</li>
-                    <li>Add logout / switch users button</li>
-                    <li>Set up socket io to grab usernames from mongo on load</li>
-                    <li>Eat a cookie</li>
-                    <li>When loading the conversation, maybe only load to a certain extent then load more if 
-                        the user scrolls up</li>
-                    <li>Find favicon</li>
-                    <li>Set up "forbidden" landing page</li>
-                </ul>
+                <div id="expandContainer">
+                    <div id="expandBtnContainer">
+                        <span id="expandButton" onclick="onRightExpandToggle()" class="fa fa-angle-left fa-2x"></span>
+                    </div>
+                </div>
+                <div id="searchContainer">
+                    <div id="searchInputContainer">
+                        <input type="text" id="searchInput" placeholder="Search">
+                    </div>
+                    <div id="searchList"></div>
+                </div>
+                <div id="advSearchContainer">
+
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+<!--
+To-do List
+    Key features:
+        Search for Magic cards by name
+        Card names have links to a card image
+        Logout / switch user button
+        Emoji plugin
+        Magic symbols - similar to emoji plugin
+    Other features:
+        Set up active_users collection
+        User logos / images
+        favicon
+        Themes
+-->

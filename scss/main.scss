@@ -1,97 +1,271 @@
-$grid-columns: 10em 1fr 15em;
+@import "variables/themes";
+
+$left-panel-color: $blue-green;//$blackish;
+$chat-border-color: $blackish;
+$chat-background: $light-blue;
+$search-background: $nude;
+$left-container-text-color: white;
+
+$right-container-width: 20em;
+$right-container-width-expand: 35em;
+$expand-container-width: 1em;
+$grid-columns-expanded: 12em 1fr $right-container-width-expand;
+$grid-columns: 12em 1fr $right-container-width;
 $grid-rows: 1fr 5em;
+$left-col: 1;
+$left-row-start: 1;
+$left-row-end: 3;
+$main-col: 2;
+$main-row: 1;
+
+$title-padding: .5em;
+$title-font-size: 1.5em;
+$title-font: "Comic Sans MS", cursive, sans-serif;
+
+$border-size: .1em;
+$input-font-size: 1.1em;
+$input-padding: .3em;
+
+
+.hidden-data {
+    display: none;
+}
 
 #gridWrapper {
     height: 100%;
     display: grid;
     grid-template-columns: $grid-columns;
     grid-template-rows: $grid-rows;
-}
 
-.hidden-data {
-    display: none;
-}
+    input[type="text"] {
+        border-radius: .5em;
+        border-style: none;
+        border: .03em solid $blackish;
 
-/*
-* Left Container Styles
-*/
-#leftContainer {
-    height: 100%;
-    width: 100%;
-    grid-column: 1;
-    grid-row: 1/3;
-    background-color: #97caef;
-}
-
-#titleBar {
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-
-    span {
-        font-size: 1.5em;
-        font-family: "Comic Sans MS", cursive, sans-serif;
-        margin: 10px;
+        &:focus {
+            outline: none;
+        }
     }
-}
 
-/*
-* Main Chat Container Styles
-*/
-#mainChatContainer {
-    grid-column: 2;
-    grid-row: 1;
-    overflow-y: auto;
-}
+    &.expand-right {
+        grid-template-columns: $grid-columns-expanded;
+        transition: grid-template-columns 2s ;
 
-#chatList {
-    list-style-type: none;
-
-    li {
-        height: 2em;
-        border: .1em solid black;
-        margin: 1em;
-        padding: .5em;
+        #rightContainer {
+            #advSearchContainer {
+                display: inline-block;
+                width: $right-container-width-expand - $expand-container-width;
+                height: 100%;
+            }
+        }
     }
-}
 
-/*
-* Message Input Styles
-*/
-#mainMessageContainer {
-    width: 100%;
-    height: 100%;
-    grid-column: 2;
-    grid-row: 2;
-}
-
-#chatForm {
-    margin: 1em;
-
-    > div {
-        display: inline-block;
+    /*
+    * Left Container Styles
+    */
+    #leftContainer {
         height: 100%;
+        width: 100%;
+        grid-column: $left-col;
+        grid-row-start: $left-row-start;
+        grid-row-end: $left-row-end;
+        background-color: $left-panel-color;
+        color: $left-container-text-color;
+
+        #titleBar {
+            width: 100%;
+            padding-top: $title-padding;
+            padding-bottom: $title-padding;
+            text-align: center;
+        
+            span {
+                font-size: $title-font-size;
+                font-family: $title-font;
+            }
+        }
     }
-}
 
-#messageInputContainer {
-    width: 100%;
-}
+    /*
+    * Main Chat Container Styles
+    */
+    #mainChatContainer {
+        grid-column: $main-col;
+        grid-row: $main-row;
+        overflow-y: auto;
+        background-color: $chat-background;
 
-#messageInput {
-    height: 100%;
-    width: 100%;
-    font-size: 1.5em;
-    padding: 5px;
-}
+        #chatList {
+            list-style-type: none;
+            padding: 0;
+            
+            .list-item {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
 
-/*
-* Right Container Styles
-*/
-#rightContainer {
-    height: 100%;
-    width: 100%;
-    grid-column: 3;
-    grid-row: 1/3;
+                &:hover {
+                    background-color: rgba(44,53,49,.2);
+                }
+
+                .chat-row {
+                    padding-top: .5em;
+                    padding-bottom: .5em;
+                    margin-left: 2em;
+            
+                    .cont-image {
+                        width: 2.5em;
+                        height: 2.5em;
+                        border: $border-size solid $chat-border-color;
+                        float: left;
+                    }
+            
+                    .cont-content {
+                        margin-left: 3.5em;
+            
+                        .content-header {
+                            > div {
+                                display: inline-block;
+                            }
+            
+                            .from-user {
+                                font-size: 1.3em;
+                                color: black;
+                                font-weight: bold;
+                            }
+            
+                            .time-sent {
+                                font-size: .9em;
+                                padding-left: .7em;
+                                color: grey;
+                            }
+                        }
+                
+                        .cont-message {
+                            box-sizing: border-box;
+                            font-size: 1.1em;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+    * Message Input Styles
+    */
+    #mainMessageContainer {
+        width: 100%;
+        height: 100%;
+        grid-column: 2;
+        grid-row: 2;
+        background-color: $chat-background;
+        border-top: $border-size solid $blackish;
+
+        #chatForm {
+            margin: 1em;
+        
+            > div {
+                display: inline-block;
+                height: 100%;
+            }
+
+            #messageInputContainer {
+                width: 100%;
+
+                #messageInput {
+                    height: 100%;
+                    width: 100%;
+                    box-sizing: border-box;
+                    font-size: $input-font-size;
+                    padding: $input-padding;
+                }
+            }
+        }
+    }
+
+    /*
+    * Right Container Styles
+    */
+    #rightContainer {
+        height: 100%;
+        width: 100%;
+        grid-column: 3;
+        grid-row: 1/3;
+        background-color: $nude;
+
+        > div {
+            display: inline-block;
+        }
+
+        #expandContainer {
+            height: 100%;
+            width: $expand-container-width;
+            float: left;
+
+            #expandBtnContainer {
+                position: relative;
+                top: 50%;
+                cursor: pointer;
+            }
+        }
+
+        #searchContainer {
+            height: 100%;
+            width: $right-container-width - $expand-container-width;
+
+            #searchInputContainer {
+                padding: 1em;
+                width: 100%;
+                box-sizing: border-box;
+
+                #searchInput {
+                    width: 100%;
+                    font-size: $input-font-size;
+                    padding: $input-padding 0 $input-padding $input-padding;
+                }
+
+            }
+
+            #searchList {
+                height: 100%;
+                overflow-y: auto;
+
+                .search-result {
+                    width: 100%;
+                    height: 18em;
+                    border-top: .1em solid $blackish;
+                    border-bottom: .1em solid $blackish;
+        
+                    &:hover {
+                        background-color: rgb(217,176,140);
+                    }
+        
+                    .cont-search-left {
+        
+                    }
+        
+                    .cont-search-img {
+                        float: right;
+                        height: 100%;
+                        margin-right: .5em;
+
+                        img {
+                            position: relative;
+                            top: .6em;
+                            height: auto;
+                            width: 12em;
+                        }
+                    }
+        
+                    // .cont-search-name {
+                    // }
+                }
+                
+            }
+        }
+
+        #advSearchContainer {
+            display: none;
+        }
+    }
 }
