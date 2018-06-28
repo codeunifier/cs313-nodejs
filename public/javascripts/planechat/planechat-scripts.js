@@ -132,6 +132,8 @@ function getDateFormat(date) {
 
 _socket.on('newChat', function (model) {
     createChatRow(model);
+
+    $('#mainChatContainer').scrollTop($('#mainChatContainer')[0].scrollHeight);
 });
 
 function createChatRow(model) {
