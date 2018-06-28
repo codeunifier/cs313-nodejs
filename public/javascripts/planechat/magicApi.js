@@ -22,6 +22,25 @@ var MagicApi = function () {
             });
 
             return deferred.promise();
+        },
+        getCardByMultiverseId: function (multiverseid) {
+            var deferred = $.Deferred();
+
+            $.ajax({
+                type: "GET",
+                url: "/magic/card/" + multiverseid,
+                dataType: "json",
+                success: function(data) {
+                    if (data != null) {
+                        deferred.resolve(data);
+                    }
+                },
+                error: function(request, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus);
+                } 
+            });
+
+            return deferred.promise();
         }
     }
 }

@@ -42,13 +42,17 @@ db.createCollection("messages", {
                     bsonType: "string",
                     description: "must be a string and is required"
                 },
+                card_tags: {
+                    bsonType: "array",
+                    description: "must be an array and is not required"
+                },
                 date_sent: {
                     bsonType: "date",
                     description: "must be a date and is required"
                 },
                 date_deleted: {
                     bsonType: "date",
-                    description: "must be a date and is required"
+                    description: "must be a date and is not required"
                 }
             }
         }

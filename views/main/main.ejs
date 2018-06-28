@@ -5,53 +5,16 @@
         <link rel='stylesheet' href='/stylesheets/planechat/app.css' />
         <link rel='stylesheet' href='/stylesheets/planechat/main.css' />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-        <script src="/javascripts/scripts.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
-        <script src="/javascripts/planechat/planechat-scripts.js"></script>
+        <script src="/javascripts/scripts.js"></script>
+        <script src="/javascripts/planechat/popper.js"></script>
         <script src="/javascripts/planechat/magicApi.js"></script>
+        <script src="/javascripts/planechat/ajaxData.js"></script>
+        <script src="/javascripts/planechat/planechat-scripts.js"></script>
         <script src="/javascripts/cookie.js"></script>
         <script type="text/javascript">
-            window.onload = function () {
-                socket.emit('userLoaded', $('#hidden_username')[0].textContent);
-
-                var form = document.getElementById('chatForm');
-                
-                form.onsubmit = function (event) {
-                    var model = {
-                        from_user: $('#hidden_username')[0].textContent,
-                        message: $('#messageInput').val()
-                    }
-
-                    socket.emit('chat', model);
-
-                    $('#messageInput').val('');
-                    
-                    return false;
-                }
-
-                var magic = new MagicApi();
-
-                //set key listener for search input
-                $("#searchInput").on("input", function (event) {
-                    //TODO: add live search for magic cards
-                    var text = event.target.value;
-
-                    if (text.length > 2) {
-                        magic.queryCardsByName(text).done(function (data) {
-                            if (data) {
-                                if (data.cards.length > 0) {
-                                    setSearchResults(data.cards);
-                                } else {
-                                    setSearchResults(null);
-                                }
-                            }
-                        });
-                    } else {
-                        setSearchResults(null);
-                    }
-                });
-            }
+            window.onload = onLoadFunction;
         </script>
     </head>
     <body>
@@ -73,6 +36,10 @@
                 <div id="chatList"></div>
             </div>
             <div id="mainMessageContainer">
+                <div id="cardTagsContainer">
+                    <div id="cardTagsText">Tags: </div>
+                    <div id="cardTagsList"></div>
+                </div>
                 <form id="chatForm" action="">
                     <div id="messageInputContainer">
                         <input type="text" id="messageInput" autocomplete="off" placeholder="Press enter to send">
@@ -92,7 +59,7 @@
                     <div id="searchList"></div>
                 </div>
                 <div id="advSearchContainer">
-
+                    
                 </div>
             </div>
         </div>
@@ -101,15 +68,19 @@
 
 <!--
 To-do List
-    Key features:
-        Search for Magic cards by name
-        Card names have links to a card image
+    To complete class assignment:
+        Send a message with a card tag
+        Card tags appear in messages
+        Unique username in database
         Logout / switch user button
+    Key features:
         Emoji plugin
         Magic symbols - similar to emoji plugin
     Other features:
+        Set up conversations collection
         Set up active_users collection
         User logos / images
         favicon
         Themes
+        Add username referencing in chat (like slack with "@")
 -->

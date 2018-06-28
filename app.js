@@ -3,13 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
+var mongoose = require('./local_modules/mon-mid');
 var helmet = require('helmet');
 var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var assignmentsRouter = require('./routes/assignments');
+var magicRouter = require('./routes/magic');
 
 var app = express();
 var server = require('http').Server(app);
@@ -52,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/assignments', assignmentsRouter);
+app.use('/magic', magicRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -73,18 +75,13 @@ io.sockets.on('connection', function (socket) {
   console.log('user connected');
 
   socket.on('chat', function (model) {
-    // var newMsg = new messageModel(model);
-    // console.log("New model for database:");
-    // console.log(newMsg);
-    // newMsg.save().then(item => {
-    //   console.log("Successfully saved to database");
-    //   // console.log(item);
-    // }).catch(err => {
-    //   console.log("Unable to save to database");
-    //   // console.log(err);
-    // });
-
-    io.emit('chat', model);
+    mongoose.insertMessage(model, function (response, didInsert, messageModel) {
+      if (!didInsert || response.insertedCount < 1) {
+        //TODO: alert user that message text was invalid
+      } else {
+        io.emit('newChat', messageModel);
+      }
+    });
   });
 
   socket.on('userLoaded', function (username) {

@@ -4,9 +4,6 @@ var ssn;
 
 var mongoose = require('../local_modules/mon-mid');
 
-//models
-var LoginCookie = require('../models/login-cookie-model');
-
 mongoose.attemptConnection(function (err) {
   console.log(err.name + ": " + err.message);
 });
@@ -56,10 +53,9 @@ router.post('/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  mongoose.validateUser(username, password, function(err, isValid) {
+  mongoose.validateUserCredentials(username, password, function(err, isValid) {
     if (err) {
-      res.status(400);
-      res.send({error: err});
+      res.status(500).send({error: err});
     } else if (isValid) {
       //TODO: check if user is already logged in
       //TODO: set up active_users collection
@@ -69,11 +65,9 @@ router.post('/login', function (req, res) {
   
       ssn.username = username;
       res.cookie("pc_login", username);
-      res.status(200);
-      res.send(JSON.stringify({ data: true }));
+      res.status(200).send(JSON.stringify({ data: true }));
     } else {
-      res.status(200);
-      res.send({error: "Username / password invalid"});
+      res.status(200).send({error: "Username / password invalid"});
     }
   });
 });
@@ -88,16 +82,24 @@ router.post('/newAccount', function (req, res) {
 
   mongoose.insertNewUser(model, function (response, didInsert) {
     if (!didInsert) {
-      res.status(200);
-      res.send(null);
+      res.status(500).send(response);
     } else {
       var expiration = new Date();
       expiration.setFullYear(expiration.getFullYear() + 1);
 
       ssn.username = model.username;
       res.cookie("pc_login", model.username);
-      res.status(200);
-      res.send(JSON.stringify({data: true}));
+      res.status(200).send(JSON.stringify({data: true}));
+    }
+  });
+});
+
+router.get('/conversation', function (req, res, next) {
+  mongoose.getConversation(function (err, data) {
+    if (err == null) {
+      res.status(200).send(JSON.stringify(data));
+    } else {
+      res.status(500).send(err);
     }
   });
 });

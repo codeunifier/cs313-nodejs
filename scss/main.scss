@@ -26,9 +26,17 @@ $border-size: .1em;
 $input-font-size: 1.1em;
 $input-padding: .3em;
 
+$search-card-width: 12em;
+
 
 .hidden-data {
     display: none;
+}
+
+.card-tag-image {
+    img {
+        width: 13em;
+    }
 }
 
 #gridWrapper {
@@ -144,6 +152,21 @@ $input-padding: .3em;
                             box-sizing: border-box;
                             font-size: 1.1em;
                         }
+
+                        .cont-tags {
+                            .card-tag {
+                                display: inline-block;
+                                color: $blue-green;
+                                text-decoration: underline;
+                                font-size: .9em;
+                                margin-left: .2em;
+                                margin-right: .2em;
+            
+                                &:hover {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -161,8 +184,43 @@ $input-padding: .3em;
         background-color: $chat-background;
         border-top: $border-size solid $blackish;
 
+        #cardTagsContainer {
+            width: 100%;
+            height: 1.5em;
+
+            > div {
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
+
+            #cardTagsText {
+                margin-left: 1em;
+                width: 3em;
+                font-size: 1.2em;
+            }
+
+            #cardTagsList {
+                width: 80%;
+
+                .card-tag {
+                    display: inline-block;
+                    color: $blue-green;
+                    text-decoration: underline;
+                    font-size: 1.2em;
+                    margin-left: .2em;
+                    margin-right: .2em;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
         #chatForm {
-            margin: 1em;
+            margin-left: 1em;
+            margin-right: 1em;
         
             > div {
                 display: inline-block;
@@ -229,6 +287,7 @@ $input-padding: .3em;
             #searchList {
                 height: 100%;
                 overflow-y: auto;
+                bottom: 0;
 
                 .search-result {
                     width: 100%;
@@ -239,9 +298,30 @@ $input-padding: .3em;
                     &:hover {
                         background-color: rgb(217,176,140);
                     }
+
+                    > div {
+                        display: inline-block;
+                    }
         
                     .cont-search-left {
-        
+                        width: 5em;
+                        height: 100%;
+                        float: left;
+
+                        .util-send {
+                            position: relative;
+                            top: 50%;
+                            width: 100%;
+                            height: 20px;
+                            text-align: center;
+
+                            span {
+                                &:hover {
+                                    cursor: pointer;
+                                    color: $blue-green;
+                                }
+                            }
+                        }
                     }
         
                     .cont-search-img {
@@ -253,7 +333,7 @@ $input-padding: .3em;
                             position: relative;
                             top: .6em;
                             height: auto;
-                            width: 12em;
+                            width: $search-card-width;
                         }
                     }
         

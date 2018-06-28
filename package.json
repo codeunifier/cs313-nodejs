@@ -1,6 +1,6 @@
 {
   "name": "myapp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "chat app using socket.io",
   "private": true,
   "scripts": {
@@ -19,7 +19,10 @@
     "mongo-sanitize": "^1.0.0",
     "mongoose": "^5.1.6",
     "morgan": "~1.9.0",
-    "socket.io": "^2.1.1"
+    "mtgsdk": "^0.3.0",
+    "popper.js": "^1.14.3",
+    "socket.io": "^2.1.1",
+    "sweetalert": "^2.1.0"
   },
   "devDependencies": {
     "node-sass": "^4.9.0"
