@@ -340,9 +340,9 @@ function getTagInfo(jElm) {
 
 function onNewTagClick(tagInfo) {
     //remove from tags array
-    for (var i = 0; i < tags.length; i++) {
-        if (tags[i].multiverseid == tagInfo.multiverseid) {
-            tags.splice(i, 1);
+    for (var i = 0; i < _tags.length; i++) {
+        if (_tags[i].multiverseid == tagInfo.multiverseid) {
+            _tags.splice(i, 1);
             break;
         }
     }
