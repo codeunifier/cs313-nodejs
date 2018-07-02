@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var ssn;
 
 var mongoose = require('../local_modules/mon-mid');
 
@@ -14,24 +13,19 @@ router.get('/', function(req, res, next) {
 });
 
 function auth(req, res, next) {
-  var cookie = req.cookies.pc_login;
-
-  if (ssn && cookie != null) {
-    if (req.session && ssn.username == cookie) {
+  if (req.cookies.user_sid != null) {
+    if (req.session) {
       next();
     } else {
-      res.sendStatus(403);
+      res.sendStatus(403);//forbidden
     }
-  } else if (ssn == null && cookie != null) {
-    res.clearCookie('pc_login');
-    res.redirect('/login');
   } else {
     res.redirect('/login');
   }
 }
 
 router.get('/main', auth, function(req, res, next) {
-  res.render('main/main', { title: 'Planechat', username: ssn.username });
+  res.render('main/main', { title: 'Planechat', username: req.session.user });
 });
 
 router.get('/error', function (req, res, next) {
@@ -48,8 +42,6 @@ router.get('/login', function (req, res, next) {
  * *************************************************/
 
 router.post('/login', function (req, res) {
-  ssn = req.session;
-
   var username = req.body.username;
   var password = req.body.password;
 
@@ -57,14 +49,7 @@ router.post('/login', function (req, res) {
     if (err) {
       res.status(500).send({error: err});
     } else if (isValid) {
-      //TODO: check if user is already logged in
-      //TODO: set up active_users collection
-      
-      var exp = new Date();
-      exp.setFullYear(exp.getFullYear() + 1);
-  
-      ssn.username = username;
-      res.cookie("pc_login", username);
+      req.session.user = username;
       res.status(200).send(JSON.stringify({ data: true }));
     } else {
       res.status(200).send({error: "Username / password invalid"});
@@ -73,8 +58,6 @@ router.post('/login', function (req, res) {
 });
 
 router.post('/newAccount', function (req, res) {
-  ssn = req.session;
-
   var model = {
     username: req.body.username,
     password: req.body.pass
@@ -84,18 +67,23 @@ router.post('/newAccount', function (req, res) {
     if (!didInsert) {
       res.status(500).send(response);
     } else {
-      var expiration = new Date();
-      expiration.setFullYear(expiration.getFullYear() + 1);
-
-      ssn.username = model.username;
-      res.cookie("pc_login", model.username);
       res.status(200).send(JSON.stringify({data: true}));
     }
   });
 });
 
-router.get('/conversation', function (req, res, next) {
+router.get('/conversation', auth, function (req, res, next) {
   mongoose.getConversation(function (err, data) {
+    if (err == null) {
+      res.status(200).send(JSON.stringify(data));
+    } else {
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.get('/activeusers', auth, function (req, res, next) {
+  mongoose.getActiveUsers(function (err, data) {
     if (err == null) {
       res.status(200).send(JSON.stringify(data));
     } else {

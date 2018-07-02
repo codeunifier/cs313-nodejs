@@ -1,5 +1,6 @@
 db.users.drop();
 db.messages.drop();
+db.activeusers.drop();
 
 db.createCollection("users", {
     validator: {
@@ -53,6 +54,25 @@ db.createCollection("messages", {
                 date_deleted: {
                     bsonType: "date",
                     description: "must be a date and is not required"
+                }
+            }
+        }
+    }
+});
+
+db.createCollection("activeusers", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["username", "time_active"],
+            properties: {
+                username: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                time_active: {
+                    bsonType: "date",
+                    description: "must be a date and is required"
                 }
             }
         }

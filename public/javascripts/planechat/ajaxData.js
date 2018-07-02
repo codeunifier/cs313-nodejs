@@ -64,6 +64,27 @@ var ajaxData = function () {
             });
 
             return deferred.promise();
+        },
+        getActiveUsers: function () {
+            var deferred = $.Deferred();
+
+            $.ajax({
+                method: "GET",
+                url: "/activeusers",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        deferred.resolve(data);
+                    }
+                },
+                error: function (err) {
+                    deferred.resolve({
+                        error: err.responseText
+                    });
+                }
+            });
+
+            return deferred.promise();
         }
     }
 }

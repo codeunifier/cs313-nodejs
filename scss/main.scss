@@ -1,9 +1,10 @@
 @import "variables/themes";
 
-$left-panel-color: $blue-green;//$blackish;
+$left-panel-color: $blue-green;//$blackish
 $chat-border-color: $blackish;
-$chat-background: $light-blue;
-$search-background: $nude;
+$chat-background: white;//$light-blue;
+$message-background: $blue-light;//$light-blue;
+$search-background: $blue-green;//$nude;
 $left-container-text-color: white;
 
 $right-container-width: 20em;
@@ -89,6 +90,23 @@ $search-card-width: 12em;
             span {
                 font-size: $title-font-size;
                 font-family: $title-font;
+            }
+        }
+
+        #usernameContainer {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 2em;
+        }
+
+        #onlineUsersContainer {
+
+            > span {
+                margin-left: 1em;
+            }
+
+            #onlineUsersList {
+
             }
         }
     }
@@ -181,7 +199,7 @@ $search-card-width: 12em;
         height: 100%;
         grid-column: 2;
         grid-row: 2;
-        background-color: $chat-background;
+        background-color: $message-background;
         border-top: $border-size solid $blackish;
 
         #cardTagsContainer {
@@ -249,7 +267,7 @@ $search-card-width: 12em;
         width: 100%;
         grid-column: 3;
         grid-row: 1/3;
-        background-color: $nude;
+        background-color: $search-background;
 
         > div {
             display: inline-block;
@@ -284,63 +302,69 @@ $search-card-width: 12em;
 
             }
 
-            #searchList {
-                height: 100%;
-                overflow-y: auto;
+            #searchListContainer {
+                position: absolute;
                 bottom: 0;
+                top: 4.4em;
 
-                .search-result {
-                    width: 100%;
-                    height: 18em;
-                    border-top: .1em solid $blackish;
-                    border-bottom: .1em solid $blackish;
-        
-                    &:hover {
-                        background-color: rgb(217,176,140);
-                    }
+                #searchList {
+                    overflow-y: auto;
+                    height: 100%;
 
-                    > div {
-                        display: inline-block;
-                    }
-        
-                    .cont-search-left {
-                        width: 5em;
-                        height: 100%;
-                        float: left;
+                    .search-result {
+                        width: 100%;
+                        height: 18em;
+                        border-top: .1em solid $blackish;
+                        border-bottom: .1em solid $blackish;
+            
+                        &:hover {
+                            background-color: rgb(217,176,140);
+                        }
 
-                        .util-send {
-                            position: relative;
-                            top: 50%;
-                            width: 100%;
-                            height: 20px;
-                            text-align: center;
+                        > div {
+                            display: inline-block;
+                        }
+            
+                        .cont-search-left {
+                            width: 5em;
+                            height: 100%;
+                            float: left;
 
-                            span {
-                                &:hover {
-                                    cursor: pointer;
-                                    color: $blue-green;
+                            .util-send {
+                                position: relative;
+                                top: 50%;
+                                width: 100%;
+                                height: 20px;
+                                text-align: center;
+
+                                span {
+                                    &:hover {
+                                        cursor: pointer;
+                                        color: $blue-green;
+                                    }
                                 }
                             }
                         }
-                    }
-        
-                    .cont-search-img {
-                        float: right;
-                        height: 100%;
-                        margin-right: .5em;
+            
+                        .cont-search-img {
+                            float: right;
+                            height: 100%;
+                            margin-right: .5em;
 
-                        img {
-                            position: relative;
-                            top: .6em;
-                            height: auto;
-                            width: $search-card-width;
+                            img {
+                                position: relative;
+                                top: .6em;
+                                height: auto;
+                                width: $search-card-width;
+                            }
                         }
+            
+                        // .cont-search-name {
+                        // }
                     }
-        
-                    // .cont-search-name {
-                    // }
+                    
                 }
-                
+
             }
         }
 

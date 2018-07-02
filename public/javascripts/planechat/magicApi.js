@@ -4,7 +4,7 @@ var MagicApi = function () {
             var deferred = $.Deferred();
 
             $.ajax({
-                type: "GET",
+                type: "GET", //TODO: change this to go through my server
                 url: "https://api.magicthegathering.io/v1/cards?name=" + text,
                 data: {},
                 success: function (data) { 

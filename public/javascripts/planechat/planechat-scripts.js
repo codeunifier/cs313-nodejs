@@ -3,19 +3,31 @@ var _magic = new MagicApi();
 var _dataRepository = new ajaxData();
 var _results = [];
 var _tags = [];
+var _username = null;
 
 $.fn.exists = function () {
     return this.length !== 0;
 }
 
 function onLoadFunction() {
-    _socket.emit('userLoaded', $('#hidden_username')[0].textContent);
+    _username = $('#hidden_username')[0].textContent;
+
+    _socket.emit('userLoaded', _username);
+
+    //get users currently online
+    _dataRepository.getActiveUsers().done(function (data) {
+        for (var i = 0; i < data.length; i++) {
+            $("#onlineUsersList").append($('<li>').text(data[i].username));
+        }
+    });
+
+    //listen to other users connecting
 
     var form = document.getElementById('chatForm');
     
     form.onsubmit = function (event) {
         var model = {
-            from_user: $('#hidden_username')[0].textContent,
+            from_user: _username,
             message: $('#messageInput').val(),
             tags: getCardTagsForMessage()
         }
@@ -107,6 +119,8 @@ function getDateFormat(date) {
     if (now.getDate() == date.getDate() && now.getMonth() == date.getMonth() && now.getFullYear() == date.getFullYear()) {
         //today
         str = "Today at ";
+    } else {
+        str = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " ";
     }
 
     var isAM;
@@ -129,12 +143,6 @@ function getDateFormat(date) {
 
     return str;
 }
-
-_socket.on('newChat', function (model) {
-    createChatRow(model);
-
-    $('#mainChatContainer').scrollTop($('#mainChatContainer')[0].scrollHeight);
-});
 
 function createChatRow(model) {
     var img = "";
@@ -163,8 +171,22 @@ function createChatRow(model) {
     $("#chatList").append(row);
 }
 
-_socket.on('newUser', function (username) {
+_socket.on('newChat', function (model) {
+    createChatRow(model);
+
+    $('#mainChatContainer').scrollTop($('#mainChatContainer')[0].scrollHeight);
+});
+
+_socket.on('userConn', function (username) {
     $("#onlineUsersList").append($('<li>').text(username));
+});
+
+_socket.on('userDisc', function (username) {
+    $("#onlineUsersList li").each(function (index) {
+        if ($(this).innerHTML == username) {
+            $("#onlineUsersList").remove(this);
+        }
+    });
 });
 
 function getCardTagsForMessage() {

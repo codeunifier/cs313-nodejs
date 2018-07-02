@@ -3,9 +3,11 @@
 var mongoose = require('mongoose');
 var sanitize = require('mongo-sanitize');
 var bcrypt = require('bcrypt');
+
 var User = require('../models/user-model');
 var Message = require('../models/message-model');
-var Tag = require('../models/message-model');
+var ActiveUser = require('../models/active-user-model');
+
 const SALT_ROUNDS = 13; //~ 1sec / hash
 const CONVERSATION_LIMIT = 100;
 const MONGODB_URI = process.env.MONGOLAB_URI;
@@ -23,6 +25,9 @@ function validateData(colPath, data) {
                 && Array.isArray(data.tags) //TODO: validate the tags in the array?
                 && typeof data.from_user == "string"
                 && typeof data.date_sent == "object"; //TODO: figure out how to validate as a date
+        } else if (colPath == "activeUser") {
+            isValid = typeof data.username == "string"
+                && typeof data.time_active == "object"; //TODO: figure out how to validate as a date
         }
     }
 
@@ -121,4 +126,36 @@ module.exports.getConversation = function getConversation(callback) {
     Message.find(function (err, docs) {
         callback(err, docs);
     }).limit(CONVERSATION_LIMIT);
+}
+
+module.exports.getActiveUsers = function getActiveUsers(callback) {
+    ActiveUser.find(function (err, docs) {
+        callback(err, docs);
+    });
+}
+
+module.exports.insertActiveUser = function insertActiveUser(username, callback) {
+    var sanUser = sanitize(username);
+
+    var model = new ActiveUser({username: sanUser, time_active: new Date()});
+
+    if (validateData("activeUser", model)) {
+        ActiveUser.create(model, function (err, doc) {
+            if (err) {
+                callback(err, false);
+            } else {
+                callback(doc, true);
+            }
+        });
+    } else {
+        callback("Invalid input data", false);
+    }
+}
+
+module.exports.deleteActiveUser = function deleteActiveUser(username, callback) {
+    var sanUser = sanitize(username);
+
+    ActiveUser.deleteOne({username: sanUser}, function (err) {
+        callback(err);
+    });
 }
