@@ -1,6 +1,6 @@
 {
   "name": "myapp",
-  "version": "0.4.1",
+  "version": "0.4.4",
   "description": "chat app using socket.io",
   "private": true,
   "scripts": {
