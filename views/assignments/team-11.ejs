@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/stylesheets/assignments/style.css" type="text/css">
+        <link rel="stylesheet" href="/stylesheets/assignments/team-11-styles.css" type="text/css">
+        <script src="/javascripts/planechat/popper.js"></script>
+        <script src="/javascripts/team11.js"></script>
+        <script type="text/javascript">
+            
+        </script>
+    </head>
+    <body>
+        <%- include('../partials/assignment-header') %>
+        <div class="body-data">
+            <div id="inputContainer">
+                <input id="searchText" type="text" placeholder="Search by title">
+                <input type="button" value="Search" onclick="onSearchButtonClick()">
+            </div>
+            <div id="resultsContainer">
+                <div id="resultsHeader">
+                    Showing <span id="resultNumber"></span> of <span id="resultTotal"></span><br>
+                    Click a poster to see more details
+                </div>
+                <div id="resultsList">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

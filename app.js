@@ -5,8 +5,19 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('./local_modules/mon-mid');
 var helmet = require('helmet');
-var session = require('express-session');
-var fs = require('fs');
+var expressSession = require('express-session');
+var session = expressSession({
+  key: 'user_sid',
+  secret: "planechat",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, //can't get https to work
+    httpOnly: true,
+    expires: 60000 * 60 * 24 * 30 * 3 //3 months
+    // maxAge: 60000 * 60 * 24 * 30 * 3 
+  }
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -27,21 +38,21 @@ app.use(helmet({
     action: "deny"
   }
 }));
-app.use(session({
-  key: 'user_sid',
-  secret: "planechat",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false, //can't get https to work
-    httpOnly: true,
-    expires: 60000 * 60 * 24 * 30 * 3
-    // maxAge: 60000 * 60 * 24 * 30 * 3 //3 months
-  }
-}));
+app.use(session);
 
-//set socket io
-app.set('socketio', io)
+//socket io stuffs
+app.set('socketio', io);
+io.set('authorization', function (handshake, accept) {
+  session(handshake, {}, function (err) {
+    if (err) {
+      return accept(err);
+    } else {
+      var sesh = handshake.session;
+
+      accept(null, sesh.user != null);
+    }
+  });
+});
 
 //utilities
 app.use(logger('dev'));
@@ -73,42 +84,52 @@ app.use(function(err, req, res, next) {
 });
 
 io.sockets.on('connection', function (socket) {
-  var user = null;
+  session(socket.handshake, {}, function (err) {
+    if (err) {
+      console.log("Error on connection");
+      console.log(err);
+    } else {
+      var sesh = socket.handshake.session;
 
-  console.log('user connected');
+      socket.on('chat', function (model) {
+        if (sesh.user) {
+          model.from_user = sesh.user;
 
-  socket.on('chat', function (model) {
-    mongoose.insertMessage(model, function (response, didInsert, messageModel) {
-      if (!didInsert || response.insertedCount < 1) {
-        //TODO: alert user that message text was invalid
-      } else {
-        io.emit('newChat', messageModel);
-      }
-    });
-  });
+          mongoose.insertMessage(model, function (response, didInsert, messageModel) {
+            if (!didInsert || response.insertedCount < 1) {
+              //TODO: alert user that message text was invalid
+              console.log(response);
+            } else {
+              io.emit('newChat', messageModel);
+            }
+          });
+        }        
+      });
 
-  socket.on('userLoaded', function (username) {
-    mongoose.insertActiveUser(username, function (response, didInsert) {
-      if (didInsert) {
-        user = username;
-        io.emit('userConn', username);
-      } else {
-        console.log("Active user could not be inserted");
-        console.log(response);
-      }
-    });
-  });
+      socket.on('userLoaded', function () {
+        if (sesh.user) {
+          mongoose.insertActiveUser(sesh.user, function (response, didInsert) {
+            if (didInsert) {
+              io.emit('userConn', sesh.user);
+            } else {
+              console.log("Active user could not be inserted");
+              console.log(response);
+            }
+          });
+        }
+      });
 
-  socket.on('disconnect', function () {
-    console.log("user disconnected");
-    if (user) {
-      mongoose.deleteActiveUser(user, function (err) {
-        if (err) {
-          console.log("Active user could not be deleted");
-          console.log(err);
-        } else {
-          io.emit('userDisc', user);
-          user = null;
+      socket.on('disconnect', function () {
+        console.log("user disconnected");
+        if (sesh.user) {
+          mongoose.deleteActiveUser(sesh.user, function (err) {
+            if (err) {
+              console.log("Active user could not be deleted");
+              console.log(err);
+            } else {
+              io.emit('userDisc', sesh.user);
+            }
+          });
         }
       });
     }

@@ -108,4 +108,8 @@ router.get('/team', function (req, res, next) {
     res.redirect('/');
 });
 
+router.get('/week11/team', function (req, res, next) {
+    res.render('assignments/team-11', { title: "Week 11 Team" });
+});
+
 module.exports = router;

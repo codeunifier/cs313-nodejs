@@ -54,7 +54,7 @@ module.exports.insertNewUser = function insertNewUser(model, callback) {
             var userModel = new User({username: sanUser, password_hash: hash, date_created: new Date()});
 
             if (validateData("users", userModel)) {
-                User.insert(userModel/*dbModel*/, function (err, doc) {
+                User.create(userModel/*dbModel*/, function (err, doc) {
                     if (err) {
                         callback(err, false);
                     } else {

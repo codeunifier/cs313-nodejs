@@ -13,14 +13,14 @@ router.get('/', function(req, res, next) {
 });
 
 function auth(req, res, next) {
-  if (req.cookies.user_sid != null) {
-    if (req.session) {
+  if (req.session) {
+    if (req.session.user) {
       next();
     } else {
-      res.sendStatus(403);//forbidden
+      res.redirect('/login');
     }
   } else {
-    res.redirect('/login');
+    res.sendStatus(403);//forbidden
   }
 }
 

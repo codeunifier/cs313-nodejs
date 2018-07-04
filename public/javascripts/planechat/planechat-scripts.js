@@ -3,16 +3,14 @@ var _magic = new MagicApi();
 var _dataRepository = new ajaxData();
 var _results = [];
 var _tags = [];
-var _username = null;
 
 $.fn.exists = function () {
     return this.length !== 0;
 }
 
 function onLoadFunction() {
-    _username = $('#hidden_username')[0].textContent;
-
-    _socket.emit('userLoaded', _username);
+    //TODO: update on server-side to pull the actual user data
+    _socket.emit('userLoaded');
 
     //get users currently online
     _dataRepository.getActiveUsers().done(function (data) {
@@ -27,7 +25,7 @@ function onLoadFunction() {
     
     form.onsubmit = function (event) {
         var model = {
-            from_user: _username,
+            from_user: null, //TODO: update on server-side to pull the actual user data
             message: $('#messageInput').val(),
             tags: getCardTagsForMessage()
         }
@@ -177,16 +175,20 @@ _socket.on('newChat', function (model) {
     $('#mainChatContainer').scrollTop($('#mainChatContainer')[0].scrollHeight);
 });
 
-_socket.on('userConn', function (username) {
-    $("#onlineUsersList").append($('<li>').text(username));
+_socket.on('userConn', function (newUser) {
+    $("#onlineUsersList").append($('<li>').text(newUser));
 });
 
 _socket.on('userDisc', function (username) {
     $("#onlineUsersList li").each(function (index) {
-        if ($(this).innerHTML == username) {
-            $("#onlineUsersList").remove(this);
+        if ($(this).text() == username) {
+            $(this).remove();
         }
     });
+});
+
+_socket.on('disconnect', function () {
+    window.location = "/login";
 });
 
 function getCardTagsForMessage() {

@@ -1,0 +1,28 @@
+#inputContainer {
+    margin-top: 50px;
+}
+
+#resultsContainer {
+    margin-top: 50px;
+    display: none;
+}
+
+.movie-item {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 150px;
+    text-align: center;
+}
+
+/* .movie-item > div {
+    display: inline-block;
+} */
+
+.movie-poster img {
+    width: 120px;
+    height: auto;
+    cursor: pointer;
+}
