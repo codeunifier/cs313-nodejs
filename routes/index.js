@@ -67,6 +67,7 @@ router.post('/newAccount', function (req, res) {
     if (!didInsert) {
       res.status(500).send(response);
     } else {
+      req.session.user = model.username;
       res.status(200).send(JSON.stringify({data: true}));
     }
   });
