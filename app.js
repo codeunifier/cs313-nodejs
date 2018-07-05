@@ -84,6 +84,8 @@ app.use(function(err, req, res, next) {
 });
 
 io.sockets.on('connection', function (socket) {
+  checkForActiveCorpses();
+
   session(socket.handshake, {}, function (err) {
     if (err) {
       console.log("Error on connection");
@@ -108,7 +110,12 @@ io.sockets.on('connection', function (socket) {
 
       socket.on('userLoaded', function () {
         if (sesh.user) {
-          mongoose.insertActiveUser(sesh.user, function (response, didInsert) {
+          var model = {
+            user: sesh.user,
+            socketId: socket.id
+          }
+
+          mongoose.insertActiveUser(model, function (response, didInsert) {
             if (didInsert) {
               io.emit('userConn', sesh.user);
             } else {
@@ -135,5 +142,21 @@ io.sockets.on('connection', function (socket) {
     }
   });
 });
+
+function checkForActiveCorpses() {
+  mongoose.getActiveUsers(function (err, docs) {
+    if (err) {
+      console.log("ERROR: Problem checking for corpses:");
+      console.log(err);
+      return;
+    } else {
+      for (var i = 0; i < docs.length; i++) {
+        if (io.sockets.sockets[docs[i].socketId] == undefined) {
+          mongoose.deleteActiveUser(docs[i].username);
+        }
+      }
+    }
+  });
+}
 
 module.exports = { app: app, server: server };

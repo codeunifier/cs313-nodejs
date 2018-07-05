@@ -27,7 +27,8 @@ function validateData(colPath, data) {
                 && typeof data.date_sent == "object"; //TODO: figure out how to validate as a date
         } else if (colPath == "activeUser") {
             isValid = typeof data.username == "string"
-                && typeof data.time_active == "object"; //TODO: figure out how to validate as a date
+                && typeof data.time_active == "object" //TODO: figure out how to validate as a date
+                && typeof data.socketId == "string";
         }
     }
 
@@ -39,7 +40,9 @@ module.exports.attemptConnection = function attemptConnection(callback) {
         connectTimeoutMS: 10000,
         socketTimeoutMS: 10000
       }).catch(err => {
-        callback(err);
+        if (callback) {
+            callback(err);
+        }
       });
 }
 
@@ -49,19 +52,23 @@ module.exports.insertNewUser = function insertNewUser(model, callback) {
 
     bcrypt.hash(sanPass, SALT_ROUNDS, function (err, hash) {
         if (err) {
-            callback(err, false);
+            if (callback) {
+                callback(err, false);
+            }
         } else {
             var userModel = new User({username: sanUser, password_hash: hash, date_created: new Date()});
 
             if (validateData("users", userModel)) {
                 User.create(userModel/*dbModel*/, function (err, doc) {
                     if (err) {
-                        callback(err, false);
-                    } else {
+                        if (callback) {
+                            callback(err, false);
+                        }
+                    } else if (callback) {
                         callback(doc, true);
                     }
                 });
-            } else {
+            } else if (callback) {
                 callback("Invalid input data", false);
             }
         }
@@ -78,16 +85,22 @@ module.exports.validateUserCredentials = function validateUser(username, pass, c
 
     User.findOne({ username: sanUser }, function (err, user) {
         if (err) {
-            callback(err, null);
+            if (callback) {
+                callback(err, null);
+            }
         } else {
             if (user == null) {
                 //no user found in database with that username
-                callback(null, false);
+                if (callback) {
+                    callback(null, false);
+                }
             } else {
                 //validating credentials...
                 user = user.toObject();
                 bcrypt.compare(sanPass, user.password_hash).then(function (res) {
-                    callback(null, res);
+                    if (callback) {
+                        callback(null, res);
+                    }
                 });
             }
         };
@@ -112,42 +125,54 @@ module.exports.insertMessage = function insertMessage(model, callback) {
     if (validateData("messages", mModel)) {
         Message.create(mModel, function (err, doc) {
             if (err) {
-                callback(err, false);
+                if (callback) {
+                    callback(err, false);
+                }
             } else {
-                callback(doc, true, mModel);
+                if (callback) {
+                    callback(doc, true, mModel);
+                }
             }
         });
-    } else {
+    } else if (callback) {
         callback("Invalid input data", false);
     }
 }
 
 module.exports.getConversation = function getConversation(callback) {
     Message.find(function (err, docs) {
-        callback(err, docs);
+        if (callback) {
+            callback(err, docs);
+        }
     }).limit(CONVERSATION_LIMIT);
 }
 
 module.exports.getActiveUsers = function getActiveUsers(callback) {
     ActiveUser.find(function (err, docs) {
-        callback(err, docs);
+        if (callback) {
+            callback(err, docs);
+        }
     });
 }
 
-module.exports.insertActiveUser = function insertActiveUser(username, callback) {
-    var sanUser = sanitize(username);
+module.exports.insertActiveUser = function insertActiveUser(model, callback) {
+    var sanUser = sanitize(model.user);
 
-    var model = new ActiveUser({username: sanUser, time_active: new Date()});
+    var dbModel = new ActiveUser({ username: sanUser, time_active: new Date(), socketId: model.socketId });
 
-    if (validateData("activeUser", model)) {
-        ActiveUser.create(model, function (err, doc) {
+    if (validateData("activeUser", dbModel)) {
+        ActiveUser.create(dbModel, function (err, doc) {
             if (err) {
-                callback(err, false);
+                if (callback) {
+                    callback(err, false);
+                }
             } else {
-                callback(doc, true);
+                if (callback) {
+                    callback(doc, true);
+                }
             }
         });
-    } else {
+    } else if (callback) {
         callback("Invalid input data", false);
     }
 }
@@ -156,6 +181,8 @@ module.exports.deleteActiveUser = function deleteActiveUser(username, callback) 
     var sanUser = sanitize(username);
 
     ActiveUser.deleteOne({username: sanUser}, function (err) {
-        callback(err);
+        if (callback) {
+            callback(err);
+        }
     });
 }
