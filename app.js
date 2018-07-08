@@ -83,7 +83,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+/************************************************************************************
+* Socket Listeners
+*************************************************************************************/
 io.sockets.on('connection', function (socket) {
+  console.log("user connected");
+
   checkForActiveCorpses();
 
   session(socket.handshake, {}, function (err) {
@@ -143,6 +149,10 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+/*
+* this will help, but I should really find a better way to delete 
+* the active user, like when the tab/browser closes or something
+*/
 function checkForActiveCorpses() {
   mongoose.getActiveUsers(function (err, docs) {
     if (err) {
@@ -152,7 +162,15 @@ function checkForActiveCorpses() {
     } else {
       for (var i = 0; i < docs.length; i++) {
         if (io.sockets.sockets[docs[i].socketId] == undefined) {
-          mongoose.deleteActiveUser(docs[i].username);
+          var user = docs[i].username;
+          mongoose.deleteActiveUser(user, function (err) {
+            if (err) {
+              console.log("Active user could not be deleted");
+              console.log(err);
+            } else {
+              io.emit('userDisc', user);
+            }
+          });
         }
       }
     }

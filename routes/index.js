@@ -36,6 +36,20 @@ router.get('/login', function (req, res, next) {
   res.render('main/login', { message: req.errMsg });
 });
 
+router.get('/logout', function (req, res, next) {
+  var user = req.session.user;
+  req.session.user = null;
+
+  mongoose.deleteActiveUser(user, function (err) {
+    if (err) {
+      console.log("Active user could not be deleted");
+      console.log(err);
+    } else {
+      res.redirect('/login');
+    }
+  });
+});
+
 
 /****************************************************
  * AJAX CALLS
@@ -94,3 +108,6 @@ router.get('/activeusers', auth, function (req, res, next) {
 });
 
 module.exports = router;
+
+//export functions for testing
+module.exports.auth = auth;

@@ -96,7 +96,26 @@ $search-card-width: 12em;
         #usernameContainer {
             width: 100%;
             text-align: center;
+
+            span {
+                font-size: 1.2em;
+            }
+        }
+
+        #logoutContainer {
+            width: 100%;
+            text-align: center;
+            margin-top: .5em;
             margin-bottom: 2em;
+
+            #logoutButton {
+                width: 80%;
+                color: white;
+                
+                :hover {
+                    cursor: pointer;
+                }
+            }
         }
 
         #onlineUsersContainer {
@@ -338,9 +357,10 @@ $search-card-width: 12em;
                                 text-align: center;
 
                                 span {
+                                    color: black;
+
                                     &:hover {
                                         cursor: pointer;
-                                        color: $blue-green;
                                     }
                                 }
                             }

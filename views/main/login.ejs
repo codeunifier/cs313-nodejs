@@ -32,7 +32,12 @@
                     if (key == 13) {
                         onCreateAccountClick();
                     }
-                })
+                });
+
+                //hide browser message if using chrome
+                if(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
+                    $("#messageContainer").hide();
+                }
             }
         </script>
     </head>
@@ -56,6 +61,9 @@
                 </div>
             </div>
             <div id="errorMessage"><%= message %></div>
+        </div>
+        <div id="messageContainer">
+            Please use Chrome - support for other browsers is pending.
         </div>
     </body>
 </html>

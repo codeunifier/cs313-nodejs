@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
-        <script src="/javascripts/scripts.js"></script>
         <script src="/javascripts/planechat/popper.js"></script>
         <script src="/javascripts/planechat/magicApi.js"></script>
         <script src="/javascripts/planechat/ajaxData.js"></script>
@@ -25,6 +24,9 @@
                 </div>
                 <div id="usernameContainer">
                     <span><%= username %></span>
+                </div>
+                <div id="logoutContainer">
+                    <a id="logoutButton" href="/logout">Logout</a>
                 </div>
                 <div id="onlineUsersContainer">
                     <span>Users online:</span><br>
@@ -70,10 +72,9 @@
 <!--
 To-do List
     To complete class assignment:
-        Logout / switch user button
         Unit test
     Key features:
-        Active Users
+        Display name separate from username - log in using email
         Better login page
         Emoji plugin
         Magic symbols - similar to emoji plugin

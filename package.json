@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "test": "mocha",
     "watch:scss": "node-sass --watch scss -o public/stylesheets/planechat --output-style compressed"
   },
   "dependencies": {
@@ -26,6 +27,9 @@
     "sweetalert": "^2.1.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0",
     "node-sass": "^4.9.0"
   }
 }

@@ -223,46 +223,6 @@ function updateTagsOnDOM(clear) {
 
             $("#cardTagsList").append(tag);
         }
-
-        var activePopper = null;
-
-        //set mouse event listeners
-        // $("#cardTagsList .card-tag").each(function (index) {
-        //     var thisguy = $(this);
-    
-        //     thisguy.on('mouseover', function (event) {
-        //         var popupHTML = `
-        //             <div id="popup" name="tag_${_tags[index].multiverseid}" class="card-tag-image"><img src="${_tags[index].imageUrl}" onclick="onImageClick(${_tags[index].multiverseid})"></div>
-        //         `;
-    
-        //         $("body").append(popupHTML);
-    
-        //         var popup = $("#popup");
-    
-        //         activePopper = new Popper(this, popup, {
-        //             placement: 'top'
-        //         });
-    
-        //         popup.show();
-        //     });
-    
-        //     thisguy.on('mouseout', function (event) {
-        //         $("#popup").hide();
-        //         $("#popup").remove();
-        //     });
-    
-        //     thisguy.on('click', function (event) {
-        //         //remove from tags array
-        //         for (var i = 0; i < _tags.length; i++) {
-        //             if (_tags[i].name == event.target.innerText) {
-        //                 _tags.splice(i, 1);
-        //                 break;
-        //             }
-        //         }
-        //         $("#popup").remove();
-        //         updateTagsOnDOM();
-        //     });
-        // });
     }
 }
 
