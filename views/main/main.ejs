@@ -10,10 +10,15 @@
         <script src="/javascripts/planechat/popper.js"></script>
         <script src="/javascripts/planechat/magicApi.js"></script>
         <script src="/javascripts/planechat/ajaxData.js"></script>
-        <script src="/javascripts/planechat/planechat-scripts.js"></script>
+        <script src="/javascripts/planechat/PlanechatView.js"></script>
+        <script src="/javascripts/planechat/PlanechatViewController.js"></script>
         <script src="/javascripts/cookie.js"></script>
         <script type="text/javascript">
-            window.onload = onLoadFunction;
+            window.onload = function () {
+                var v = new PlanechatView();
+                var c = new PlanechatViewController(v, new MagicApi(), new ajaxData(), io);
+                c.init();
+            }
         </script>
     </head>
     <body>
@@ -50,7 +55,7 @@
             <div id="rightContainer">
                 <div id="expandContainer">
                     <div id="expandBtnContainer">
-                        <span id="expandButton" onclick="onRightExpandToggle()" class="fa fa-angle-left fa-2x"></span>
+                        <span id="expandButton" class="fa fa-angle-left fa-2x"></span>
                     </div>
                 </div>
                 <div id="searchContainer">
