@@ -15,7 +15,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      './specs/planechat-tests.spec.js'
+      './public/javascripts/planechat/PlanechatView.js',
+      './public/javascripts/planechat/PlanechatViewController.js',
+      './assets/*.js',
+      './specs/*.spec.js'
     ],
 
 

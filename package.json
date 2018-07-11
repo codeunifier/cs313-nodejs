@@ -7,6 +7,7 @@
     "start": "node ./bin/www",
     "test-server": "mocha",
     "test-client": "karma start karma.conf.js",
+    "test-client-debug": "karma start karma.conf.js --log-level DEBUG",
     "watch:scss": "node-sass --watch scss -o public/stylesheets/planechat --output-style compressed"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
     "sinon": "^6.1.3",
+    "socket.io-client": "^2.1.1",
     "watchify": "^3.11.0"
   }
 }

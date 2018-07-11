@@ -4,6 +4,8 @@ var sinon = require('sinon');
 var server = require('../app').server;
 var authFunc = require('../routes/index').auth;
 var mongooseMiddleware = require('../local_modules/mon-mid');
+var io = require('socket.io-client');
+var socketUrl = "http://localhost:3000";
 
 var bcrypt = require('bcrypt');
 var User = require('../models/user-model');
@@ -228,4 +230,3 @@ describe("Mongoose Middleware Tests", function () {
         deleteOneStub.restore();
     });
 });
-

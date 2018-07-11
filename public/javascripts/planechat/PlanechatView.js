@@ -1,11 +1,17 @@
 var PlanechatView = function () {
+    var _controller = null;
+
     function getDateFormat(date) {
         var str = "Cannot determine time";
         var now = new Date();
     
-        if (now.getDate() == date.getDate() && now.getMonth() == date.getMonth() && now.getFullYear() == date.getFullYear()) {
+        //TODO: this needs some serious reworking to fit every case - think about the ends/beginnings of months and years
+        if (now.getDate() == date.getDate() ) {
             //today
             str = "Today at ";
+        } else if (now.getDate() - 1 == date.getDate() && now.getMonth() == date.getMonth() && now.getFullYear() == date.getFullYear()) {
+            //yesterday
+            str = "Yesterday at ";
         } else {
             str = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " ";
         }
@@ -13,10 +19,10 @@ var PlanechatView = function () {
         var isAM;
     
         if (date.getHours() > 12) {
-            isAM = false;
+            isAM = false
             str += (date.getHours() - 12) + ":";
         } else {
-            isAM = true;
+            isAM = date.getHours() != 12;
             str += (date.getHours()) + ":";
         }
     
@@ -31,9 +37,17 @@ var PlanechatView = function () {
         return str;
     }
 
-    return {
-        init: function () {
+    function getTagInfo(jElm) {
+        return {
+            isNew: jElm[0].parentElement.id == "cardTagsList",
+            multiverseid: jElm[0].id,
+            imageUrl: jElm[0].title
+        }
+    }
 
+    return {
+        init: function (c) {
+            _controller = c;
         },
         getEventWrapper: function () {
             return $("body");
@@ -130,6 +144,48 @@ var PlanechatView = function () {
             // } else {
             //     $("#gridWrapper").addClass("expand-right");
             // }
+        },
+        removeUserFromOnlineUsersList: function (username) {
+            this.getOnlineUsersListItems().each(function (index) {
+                if ($(this).text() == username) {
+                    $(this).remove();
+                }
+            });
+        },
+        windowRedirect: function (path) {
+            window.location = path;
+        },
+        createPopupAtElement: function (elm) {
+            var thisguy = $(elm);
+    
+            var tagInfo = getTagInfo(thisguy);
+    
+            var popupHTML = `
+                <div id="popup" name="tag_${tagInfo.multiverseid}" class="card-tag-image"><img src="${tagInfo.imageUrl}"></div>
+            `;
+    
+            this.getEventWrapper().append(popupHTML);
+    
+            var popup = $("#popup");
+    
+            new Popper(thisguy, popup, {
+                placement: 'top'
+            });
+    
+            popup.show();
+    
+            thisguy.on('click', function (event) {
+                if (tagInfo.isNew) {
+                    _controller.onNewTagClick(tagInfo);
+                }
+            });
+        },
+        removePopup: function () {
+            $("#popup").hide();
+            $("#popup").remove();
+        },
+        getTagInfoForElm: function (elm) {
+            return getTagInfo($(elm));
         }
     }
 }

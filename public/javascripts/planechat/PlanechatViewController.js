@@ -9,7 +9,6 @@ var PlanechatViewController = function (view, magic, ajax, io) {
 
     function connectSocketIO() {
         _socket.on('newChat', function (model) {
-            //TODO: move this to the view
             _view.createChatRow(model);
 
             _view.setMainChatContainerScroll();
@@ -20,15 +19,11 @@ var PlanechatViewController = function (view, magic, ajax, io) {
         });
         
         _socket.on('userDisc', function (username) {
-            _view.getOnlineUsersListItems().each(function (index) {
-                if ($(this).text() == username) {
-                    $(this).remove();
-                }
-            });
+            _view.removeUserFromOnlineUsersList(username);
         });
         
         _socket.on('disconnect', function () {
-            window.location = "/login";
+            _view.windowRedirect('/login');
         });
     }
     
@@ -82,43 +77,17 @@ var PlanechatViewController = function (view, magic, ajax, io) {
             }
         });
     
-        var activePopper = null;
-    
         //mouse event listeners for card tags
         _view.getEventWrapper().on('mouseover', '.card-tag', function () {
-            var thisguy = $(this);
-    
-            var tagInfo = getTagInfo(thisguy);
-    
-            var popupHTML = `
-                <div id="popup" name="tag_${tagInfo.multiverseid}" class="card-tag-image"><img src="${tagInfo.imageUrl}"></div>
-            `;
-    
-            _view.getEventWrapper().append(popupHTML);
-    
-            var popup = $("#popup");
-    
-            activePopper = new Popper(this, popup, {
-                placement: 'top'
-            });
-    
-            popup.show();
-    
-            thisguy.on('click', function (event) {
-                if (tagInfo.isNew) {
-                    onNewTagClick(tagInfo);
-                }
-            });
+            _view.createPopupAtElement(this);
         });
     
         _view.getEventWrapper().on('mouseout', '.card-tag', function () {
-            activePopper = null;
-            $("#popup").hide();
-            $("#popup").remove();
+            _view.removePopup();
         });
     
         _view.getEventWrapper().on('click', '.card-tag', function () {
-            var tagInfo = getTagInfo($(this));
+            var tagInfo = _view.getTagInfoForElm(this);
             
             if (tagInfo.isNew) {
                 onNewTagClick(tagInfo);
@@ -209,30 +178,9 @@ var PlanechatViewController = function (view, magic, ajax, io) {
         }
     }
     
-    function getTagInfo(jElm) {
-        return {
-            isNew: jElm[0].parentElement.id == "cardTagsList",
-            multiverseid: jElm[0].id,
-            imageUrl: jElm[0].title
-        }
-    }
-    
-    function onNewTagClick(tagInfo) {
-        //remove from tags array
-        for (var i = 0; i < _tags.length; i++) {
-            if (_tags[i].multiverseid == tagInfo.multiverseid) {
-                _tags.splice(i, 1);
-                break;
-            }
-        }
-    
-        $("#popup").remove();
-        updateTagsOnDOM();
-    }
-
     return {
         init: function () {
-            _view.init();
+            _view.init(this);
 
             connectSocketIO();
             initialize();
@@ -240,7 +188,18 @@ var PlanechatViewController = function (view, magic, ajax, io) {
             _view.getExpandButton().click(function () {
                 _view.onRightExpandClick();
             });
+        },
+        onNewTagClick: function (tagInfo) {
+            //remove from tags array
+            for (var i = 0; i < _tags.length; i++) {
+                if (_tags[i].multiverseid == tagInfo.multiverseid) {
+                    _tags.splice(i, 1);
+                    break;
+                }
+            }
+        
+            _view.removePopup();
+            updateTagsOnDOM();
         }
     }
 }
-
